@@ -29,14 +29,17 @@ function checkCollision(rock) {
     const dodgerLeftEdge = positionToInteger(DODGER.style.left)
 
     // FIXME: The DODGER is 40 pixels wide -- how do we get the right edge?
-    const dodgerRightEdge = 0;
+    const dodgerRightEdge = dodgerLeftEdge + 40
 
     const rockLeftEdge = positionToInteger(rock.style.left)
 
     // FIXME: The rock is 20 pixel's wide -- how do we get the right edge?
-    const rockRightEdge = 0;
+    const rockRightEdge = rockLeftEdge + 20
 
-    if (false /**
+    if (rockLeftEdge < dodgerLeftEdge & rockRightEdge > dodgerLeftEdge ||
+        rockLeftEdge > dodgerLeftEdge & rockRightEdge < dodgerLeftEdge ||
+        rockLeftEdge < dodgerRightEdge & rockRightEdge > dodgerRightEdge
+             /**
                * Think about it -- what's happening here?
                * There's been a collision if one of three things is true:
                * 1. The rock's left edge is < the DODGER's left edge,
@@ -66,13 +69,25 @@ function createRock(x) {
    * Now that we have a rock, we'll need to append
    * it to GAME and move it downwards.
    */
-
+${'#game'}.append('rock')
 
   /**
    * This function moves the rock. (2 pixels at a time
    * seems like a good pace.)
    */
   function moveRock() {
+    function step() {
+      rock.style.top = `${top += 2}px`
+    }
+    if (!checkCollision()) {
+      if (top < 380) {
+        window.requestAnimationFrame(step) {
+          moveRock()
+        }
+      } else {
+        ROCKS.pop()
+      }
+    } else {endGame()}
     // implement me!
     // (use the comments below to guide you!)
     /**
@@ -90,7 +105,7 @@ function createRock(x) {
      * we should remove the rock from the DOM
      */
   }
-
+ window.requestAnimationFrame(step)
   // We should kick of the animation of the rock around here
 
   // Add the rock to ROCKS so that we can remove all rocks
@@ -108,9 +123,21 @@ function createRock(x) {
  * Finally, alert "YOU LOSE!" to the player.
  */
 function endGame() {
+  gameInterval = 0
+  ROCKS = []
+  window.removeEventListener('keydown', moveDodger)
+  alert('YOU LOSE!')
 }
 
 function moveDodger(e) {
+  game.addEventListener('keydown', function(e) {
+    if (e.which === 37) {
+      moveDodgerLeft()
+    } if (e.which === 40) {
+      moveDodgerRight()
+    }
+  }
+)
   // implement me!
   /**
    * This function should call `moveDodgerLeft()`
@@ -122,6 +149,15 @@ function moveDodger(e) {
 }
 
 function moveDodgerLeft() {
+  var left = DODGER.style.left
+  function mdl () {
+    DODGER.style.left = `${left -= 4}px`
+
+  if (left > 0) {
+    window.requestAnimationFrame(mdl)
+  }
+}
+window.requestAnimationFrame(mdl)
   // implement me!
   /**
    * This function should move DODGER to the left
@@ -130,6 +166,14 @@ function moveDodgerLeft() {
 }
 
 function moveDodgerRight() {
+  var right = DODGER.style.right
+  function mdr () {
+    DODGER.style.right = `${right -= 4}px`
+  if (right > 0) {
+    window.requestAnimationFrame(mdr)
+  }
+}
+window.requestAnimationFrame(mdr)
   // implement me!
   /**
    * This function should move DODGER to the right
