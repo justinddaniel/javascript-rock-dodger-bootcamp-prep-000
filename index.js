@@ -39,7 +39,7 @@ GAME.appendChild(rock)
 
   function moveRock() {
       rock.style.top = `${top += 2}px`;
-    
+
     if (checkCollision(rock)) {
     return endGame()
         }
@@ -75,7 +75,7 @@ function moveDodger(e) {
     moveDodgerRight()
     }
    }
-   
+
 function moveDodgerLeft() {
    window.requestAnimationFrame(function() {
    const left = positionToInteger(DODGER.style.left)
